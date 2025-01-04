@@ -1,3 +1,5 @@
+import os
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
 from backend import create_app
 
 app =  create_app()

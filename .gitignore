@@ -1,1 +1,4 @@
 .vir
+__pycache__/
+*.pyc
+*.db
