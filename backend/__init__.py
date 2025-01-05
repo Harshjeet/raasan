@@ -7,9 +7,6 @@ from flask_cors import CORS
 db = SQLAlchemy()
 jwt = JWTManager()
 
-
-
-
 def create_app():
     app = Flask(__name__)
 
@@ -28,10 +25,12 @@ def create_app():
     from .views import main as main_blueprint
     from .auth import auth as auth_blueprint
     from .api import api as api_blueprint
+    from .admin import admin as admin_blueprint
 
     app.register_blueprint(main_blueprint)
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
     app.register_blueprint(api_blueprint, url_prefix='/api')
+    app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
     # Create database tables if not already created
     with app.app_context():

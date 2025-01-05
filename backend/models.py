@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     """User model for authentication and roles."""
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
+    name = db.Column(db.String(150), nullable=True)
     password = db.Column(db.String(150), nullable=False)
     role = db.Column(db.Enum(UserRole), default=UserRole.USER, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
