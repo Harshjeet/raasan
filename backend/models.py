@@ -1,7 +1,9 @@
-from . import db
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
 from enum import Enum
+
+db = SQLAlchemy()
 
 class UserRole(Enum):
     """Enum for user roles."""
@@ -62,7 +64,7 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(50), default="Pending", nullable=False)  # Pending, Shipped, Delivered, Cancelled
+    status = db.Column(db.String(50), default="Pending", nullable=False)  
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     order_items = db.relationship('OrderItem', backref='order', lazy=True)

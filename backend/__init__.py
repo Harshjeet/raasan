@@ -2,10 +2,28 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_migrate import Migrate
+from .models import User, UserRole,db
 
 # Initialize Flask extensions
-db = SQLAlchemy()
+
 jwt = JWTManager()
+migrate = Migrate()
+def create_admin():
+    with db.session.begin():
+        existing_admin = User.query.filter_by(role = UserRole.ADMIN).first()
+        if not existing_admin:
+            admin = User(
+                email = "admin@email.com",
+                name = "AdminName",
+                password = "password",
+                role = UserRole.ADMIN
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin created")
+        else:
+            print("Admin already exists")
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +37,7 @@ def create_app():
     # Initialize Extensions
     db.init_app(app)
     jwt.init_app(app)
+    migrate.init_app(app, db)
     CORS(app)  # Enable CORS for Vue.js frontend
 
     # Import and Register Blueprints
@@ -35,5 +54,5 @@ def create_app():
     # Create database tables if not already created
     with app.app_context():
         db.create_all()
-
+        create_admin()
     return app

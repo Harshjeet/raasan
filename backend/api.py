@@ -27,3 +27,20 @@ def add_product():
     db.session.commit()
 
     return jsonify({'message': 'Product added successfully', 'product_id': new_product.id})
+
+@api.route('/product/<int:product_id>', methods=['PUT'])
+@jwt_required()
+def update_product(product_id):
+    """Update an existing product (requires authentication)."""
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify({'error': 'Product not found'}), 404
+
+    data = request.get_json()
+    product.name = data.get('name', product.name)
+    product.price = data.get('price', product.price)
+    product.description = data.get('description', product.description)
+
+    db.session.commit()
+    return jsonify({'message': 'Product updated successfully'})
+
